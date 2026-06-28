@@ -44,6 +44,9 @@ __screenshots__/
 /playwright-report
 /playwright/.cache
 
+# Local Claude Code settings
+.claude/settings.local.json
+
 # System files
 .DS_Store
 Thumbs.db
