@@ -167,9 +167,17 @@ component boundaries.
 npm run build      # outputs to dist/fleetpulse/browser
 ```
 
-It's a static SPA, so any static host works (Netlify, Vercel, GitHub Pages). For
-SPA routing, point all paths to `index.html` (e.g. a Netlify `_redirects` file
-with `/* /index.html 200`).
+It's a static SPA, so any static host works (Netlify, Vercel, GitHub Pages).
+
+This repo ships a **GitHub Pages** workflow ([`.github/workflows/deploy.yml`](.github/workflows/deploy.yml))
+that builds with the correct base href, adds a `404.html` SPA fallback, and
+publishes on every push to `main`. Enable it once via **Settings → Pages → Build
+and deployment → Source → GitHub Actions**; the site then deploys automatically to:
+
+**https://mahdiesadeghi.github.io/FleetPulse/**
+
+For other hosts, set the publish directory to `dist/fleetpulse/browser` and add an
+SPA fallback (e.g. a Netlify `_redirects` file with `/* /index.html 200`).
 
 ---
 
