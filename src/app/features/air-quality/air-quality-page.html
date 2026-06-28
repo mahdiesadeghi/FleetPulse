@@ -1,0 +1,41 @@
+<div class="fp-page fp-stack">
+  <app-page-header
+    title="Air Quality"
+    subtitle="Indoor air quality across every site — select a site to see trends"
+  />
+
+  @if (store.error()) {
+    <app-empty-state
+      tone="error"
+      icon="cloud_off"
+      title="Couldn’t load air-quality data"
+      [message]="store.error()!"
+    />
+  } @else {
+    <section class="cards">
+      @if (store.loadingSites()) {
+        @for (i of skeletonCards; track i) {
+          <app-skeleton height="260px" radius="var(--fp-radius-lg)" />
+        }
+      } @else {
+        @for (site of store.sites(); track site.id) {
+          <app-aq-site-card
+            [site]="site"
+            [selected]="site.id === store.selectedSiteId()"
+            (selectSite)="store.select($event)"
+          />
+        }
+      }
+    </section>
+
+    @if (store.selected(); as s) {
+      <section class="fp-card fp-panel">
+        <div class="trend-head">
+          <h3 class="fp-panel__title trend-head__title">{{ s.name }} · trends</h3>
+          <app-range-selector [value]="store.range()" (valueChange)="store.setRange($event)" />
+        </div>
+        <app-aq-trends [history]="store.history()" />
+      </section>
+    }
+  }
+</div>

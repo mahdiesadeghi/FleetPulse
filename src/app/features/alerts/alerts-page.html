@@ -1,0 +1,65 @@
+<div class="fp-page fp-stack">
+  <app-page-header title="Alerts" [subtitle]="subtitle()" />
+
+  <div class="filters fp-card">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Severity</mat-label>
+      <mat-select [ngModel]="store.severity()" (ngModelChange)="store.severity.set($event)">
+        <mat-option value="">All severities</mat-option>
+        @for (opt of severityOptions; track opt.value) {
+          <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Site</mat-label>
+      <mat-select [ngModel]="store.siteId()" (ngModelChange)="store.siteId.set($event)">
+        <mat-option value="">All sites</mat-option>
+        @for (s of store.sites(); track s.id) {
+          <mat-option [value]="s.id">{{ s.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Status</mat-label>
+      <mat-select [ngModel]="store.ackState()" (ngModelChange)="store.ackState.set($event)">
+        <mat-option value="all">All</mat-option>
+        <mat-option value="open">Open</mat-option>
+        <mat-option value="acknowledged">Acknowledged</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    @if (store.hasActiveFilters()) {
+      <button matButton type="button" (click)="store.clearFilters()">Clear</button>
+    }
+  </div>
+
+  @if (store.error()) {
+    <app-empty-state
+      tone="error"
+      icon="cloud_off"
+      title="Couldn’t load alerts"
+      [message]="store.error()!"
+    />
+  } @else if (store.loading() && store.alerts().length === 0) {
+    <div class="list">
+      @for (i of skeletonRows; track i) {
+        <app-skeleton height="72px" radius="var(--fp-radius-sm)" />
+      }
+    </div>
+  } @else if (store.alerts().length === 0) {
+    <app-empty-state
+      icon="check_circle"
+      title="No alerts to show"
+      message="Nothing matches the current filters — the fleet looks calm."
+    />
+  } @else {
+    <div class="list">
+      @for (alert of store.alerts(); track alert.id) {
+        <app-alert-item [alert]="alert" (acknowledge)="store.acknowledge($event)" />
+      }
+    </div>
+  }
+</div>
