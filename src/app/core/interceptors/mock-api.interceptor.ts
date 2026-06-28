@@ -9,6 +9,7 @@ import { Observable, mergeMap, of, throwError, timer } from 'rxjs';
 
 import {
   AlertQuery,
+  DeviceInput,
   DeviceQuery,
   DeviceSortField,
   DeviceStatus,
@@ -118,16 +119,33 @@ export const mockApiInterceptor: HttpInterceptorFn = (req, next) => {
     }
   }
 
-  // GET /api/devices  |  GET /api/devices/:id  |  GET /api/devices/:id/history
-  if (method === 'GET' && seg[0] === 'devices') {
+  // /api/devices  (list + create)
+  // /api/devices/:id  (read + update + delete)
+  // /api/devices/:id/history
+  if (seg[0] === 'devices') {
     if (seg.length === 1) {
-      return ok(db.queryDevices(toDeviceQuery(params)));
+      if (method === 'GET') {
+        return ok(db.queryDevices(toDeviceQuery(params)));
+      }
+      if (method === 'POST') {
+        const created = db.createDevice(req.body as DeviceInput);
+        return created ? ok(created) : fail(400, 'Invalid device payload', req.url);
+      }
     }
     if (seg.length === 2) {
-      const device = db.getDevice(seg[1]);
-      return device ? ok(device) : fail(404, 'Device not found', req.url);
+      if (method === 'GET') {
+        const device = db.getDevice(seg[1]);
+        return device ? ok(device) : fail(404, 'Device not found', req.url);
+      }
+      if (method === 'PUT') {
+        const updated = db.updateDevice(seg[1], req.body as DeviceInput);
+        return updated ? ok(updated) : fail(404, 'Device not found', req.url);
+      }
+      if (method === 'DELETE') {
+        return db.deleteDevice(seg[1]) ? ok({ id: seg[1] }) : fail(404, 'Device not found', req.url);
+      }
     }
-    if (seg.length === 3 && seg[2] === 'history') {
+    if (method === 'GET' && seg.length === 3 && seg[2] === 'history') {
       const history = db.getDeviceHistory(seg[1], range(params));
       return history ? ok(history) : fail(404, 'Device not found', req.url);
     }

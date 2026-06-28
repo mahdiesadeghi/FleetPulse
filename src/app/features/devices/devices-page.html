@@ -1,5 +1,10 @@
 <div class="fp-page fp-stack">
-  <app-page-header title="Devices" [subtitle]="subtitle()" />
+  <app-page-header title="Devices" [subtitle]="subtitle()">
+    <button matButton="filled" type="button" (click)="openCreate()">
+      <span class="material-icons" aria-hidden="true">add</span>
+      Add device
+    </button>
+  </app-page-header>
 
   <div class="filters fp-card">
     <mat-form-field class="filters__search" appearance="outline" subscriptSizing="dynamic">
@@ -67,6 +72,8 @@
         [sort]="store.sort()"
         [sortDir]="store.dir()"
         (sortChange)="store.toggleSort($event)"
+        (editDevice)="openEdit($event)"
+        (deleteDevice)="confirmDelete($event)"
       />
     }
   </div>

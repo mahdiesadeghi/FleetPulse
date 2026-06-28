@@ -13,9 +13,9 @@ test('load dashboard, open a device, and acknowledge an alert', async ({ page })
   await page.getByRole('link', { name: 'Devices' }).click();
   await expect(page.getByRole('heading', { level: 1, name: 'Devices' })).toBeVisible();
 
-  const firstRow = page.locator('.row--data').first();
-  await expect(firstRow).toBeVisible();
-  await firstRow.click();
+  const firstDevice = page.locator('.device-link').first();
+  await expect(firstDevice).toBeVisible();
+  await firstDevice.click();
   await expect(page.getByText('Predictive maintenance')).toBeVisible();
 
   // 3. Go to the alerts feed and acknowledge the first open alert.

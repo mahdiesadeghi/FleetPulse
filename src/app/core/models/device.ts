@@ -4,6 +4,16 @@ import { MaintenanceHealth } from './maintenance';
 export const DEVICE_STATUSES = ['online', 'warning', 'critical', 'offline'] as const;
 export type DeviceStatus = (typeof DEVICE_STATUSES)[number];
 
+/** Fan/motor models the fleet is built from (used by the seed and CRUD forms). */
+export const DEVICE_MODELS = [
+  'AeroCore AX-900',
+  'AeroCore AX-1400',
+  'VortexPro V2',
+  'TurboStream TS-30',
+  'CycloneMax CM-5',
+] as const;
+export type DeviceModel = (typeof DEVICE_MODELS)[number];
+
 /**
  * Live telemetry sample for a smart fan / motor.
  * Units are encoded in the field names to keep the model self-documenting.

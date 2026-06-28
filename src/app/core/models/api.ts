@@ -1,5 +1,5 @@
 import { AqMetric } from './air-quality';
-import { Device, DeviceStatus, TelemetryMetric } from './device';
+import { Device, DeviceStatus, Telemetry, TelemetryMetric } from './device';
 import { AlertSeverity, AlertType } from './alert';
 import { SortDir, TimeSeriesPoint } from './common';
 
@@ -22,6 +22,15 @@ export type DeviceSortField =
   | 'temperatureC'
   | 'powerW'
   | 'healthScore';
+
+/** Payload for creating or updating a device (`POST`/`PUT /api/devices`). */
+export interface DeviceInput {
+  name: string;
+  model: string;
+  siteId: string;
+  status: DeviceStatus;
+  telemetry: Telemetry;
+}
 
 /** Query parameters accepted by `GET /api/devices`. */
 export interface DeviceQuery {

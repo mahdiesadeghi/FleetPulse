@@ -2,7 +2,17 @@ import { DestroyRef, Injectable, computed, inject, signal } from '@angular/core'
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { catchError, debounceTime, of, switchMap, tap } from 'rxjs';
 
-import { Device, DeviceQuery, DeviceSortField, DeviceStatus, Site, SortDir } from '@core/models';
+import { Observable } from 'rxjs';
+
+import {
+  Device,
+  DeviceInput,
+  DeviceQuery,
+  DeviceSortField,
+  DeviceStatus,
+  Site,
+  SortDir,
+} from '@core/models';
 import { DeviceApi } from '@core/services/device-api';
 import { SiteApi } from '@core/services/site-api';
 
@@ -40,15 +50,21 @@ export class DevicesStore {
     () => !!this.search() || !!this.siteId() || !!this.status(),
   );
 
-  private readonly query = computed<DeviceQuery>(() => ({
-    search: this.search() || undefined,
-    siteId: this.siteId() || undefined,
-    status: this.status() || undefined,
-    sort: this.sort(),
-    dir: this.dir(),
-    page: 0,
-    pageSize: FETCH_ALL_PAGE_SIZE,
-  }));
+  // Bumping this re-runs the query — used to reload the list after a mutation.
+  private readonly _refresh = signal(0);
+
+  private readonly query = computed<DeviceQuery>(() => {
+    this._refresh();
+    return {
+      search: this.search() || undefined,
+      siteId: this.siteId() || undefined,
+      status: this.status() || undefined,
+      sort: this.sort(),
+      dir: this.dir(),
+      page: 0,
+      pageSize: FETCH_ALL_PAGE_SIZE,
+    };
+  });
 
   constructor() {
     this.loadSites();
@@ -91,6 +107,26 @@ export class DevicesStore {
     this.search.set('');
     this.siteId.set('');
     this.status.set('');
+  }
+
+  /** Reload the device list (e.g. after a create/update/delete). */
+  refresh(): void {
+    this._refresh.update((n) => n + 1);
+  }
+
+  // CRUD: each call hits the mock REST API, then refreshes the list on success.
+  // The list reload re-derives totals here; other pages re-derive on their next
+  // fetch, so the whole app stays consistent.
+  createDevice(input: DeviceInput): Observable<Device> {
+    return this.api.createDevice(input).pipe(tap(() => this.refresh()));
+  }
+
+  updateDevice(id: string, input: DeviceInput): Observable<Device> {
+    return this.api.updateDevice(id, input).pipe(tap(() => this.refresh()));
+  }
+
+  deleteDevice(id: string): Observable<{ id: string }> {
+    return this.api.deleteDevice(id).pipe(tap(() => this.refresh()));
   }
 
   private loadSites(): void {

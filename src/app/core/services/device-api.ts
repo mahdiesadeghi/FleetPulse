@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Device, DeviceHistory, DeviceQuery, Paged, TimeRange } from '../models';
+import { Device, DeviceHistory, DeviceInput, DeviceQuery, Paged, TimeRange } from '../models';
 import { toHttpParams } from '../util/http';
 
 /** Data access for devices and their telemetry history. */
@@ -23,5 +23,17 @@ export class DeviceApi {
     return this.http.get<DeviceHistory>(`${this.base}/${id}/history`, {
       params: toHttpParams({ range }),
     });
+  }
+
+  createDevice(input: DeviceInput): Observable<Device> {
+    return this.http.post<Device>(this.base, input);
+  }
+
+  updateDevice(id: string, input: DeviceInput): Observable<Device> {
+    return this.http.put<Device>(`${this.base}/${id}`, input);
+  }
+
+  deleteDevice(id: string): Observable<{ id: string }> {
+    return this.http.delete<{ id: string }>(`${this.base}/${id}`);
   }
 }

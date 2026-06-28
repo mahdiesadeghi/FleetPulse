@@ -26,13 +26,10 @@
   </div>
 
   <cdk-virtual-scroll-viewport [itemSize]="rowHeight" class="viewport">
-    <a
-      *cdkVirtualFor="let d of devices(); trackBy: trackId"
-      class="row row--data"
-      role="row"
-      [routerLink]="['/devices', d.id]"
-    >
-      <span class="cell cell--name" role="cell">{{ d.name }}</span>
+    <div *cdkVirtualFor="let d of devices(); trackBy: trackId" class="row row--data" role="row">
+      <span class="cell cell--name" role="cell">
+        <a class="device-link" [routerLink]="['/devices', d.id]">{{ d.name }}</a>
+      </span>
       <span class="cell fp-muted" role="cell">{{ d.model }}</span>
       <span class="cell fp-muted" role="cell">{{ d.siteName }}</span>
       <span class="cell" role="cell"><app-status-chip [status]="d.status" /></span>
@@ -48,6 +45,26 @@
         </span>
         <span class="hscore">{{ d.health.healthScore }}</span>
       </span>
-    </a>
+      <span class="cell cell--actions" role="cell">
+        <button
+          type="button"
+          class="row-action"
+          [matMenuTriggerFor]="menu"
+          [attr.aria-label]="'Actions for ' + d.name"
+        >
+          <span class="material-icons" aria-hidden="true">more_vert</span>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item type="button" (click)="editDevice.emit(d)">
+            <span class="material-icons menu-icon" aria-hidden="true">edit</span>
+            <span>Edit</span>
+          </button>
+          <button mat-menu-item type="button" (click)="deleteDevice.emit(d)">
+            <span class="material-icons menu-icon" aria-hidden="true">delete</span>
+            <span>Delete</span>
+          </button>
+        </mat-menu>
+      </span>
+    </div>
   </cdk-virtual-scroll-viewport>
 </div>

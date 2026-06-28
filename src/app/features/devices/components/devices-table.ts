@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
 
 import { Device, DeviceSortField, SortDir } from '@core/models';
@@ -15,11 +16,12 @@ interface Column {
 
 /**
  * Presentational device table. Renders rows with CDK virtual scrolling so the
- * DOM stays light regardless of fleet size, and emits sort requests upward.
+ * DOM stays light regardless of fleet size; emits sort requests and per-row
+ * edit/delete actions upward.
  */
 @Component({
   selector: 'app-devices-table',
-  imports: [ScrollingModule, RouterLink, DecimalPipe, StatusChip],
+  imports: [ScrollingModule, RouterLink, DecimalPipe, MatMenuModule, StatusChip],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './devices-table.html',
   styleUrl: './devices-table.scss',
@@ -29,6 +31,8 @@ export class DevicesTable {
   readonly sort = input.required<DeviceSortField>();
   readonly sortDir = input.required<SortDir>();
   readonly sortChange = output<DeviceSortField>();
+  readonly editDevice = output<Device>();
+  readonly deleteDevice = output<Device>();
 
   protected readonly rowHeight = 56;
   protected readonly columns: Column[] = [
@@ -39,6 +43,7 @@ export class DevicesTable {
     { label: 'Temp', sortKey: 'temperatureC', numeric: true },
     { label: 'Power', sortKey: 'powerW', numeric: true },
     { label: 'Health', sortKey: 'healthScore', numeric: true },
+    { label: '' },
   ];
   protected readonly color = scoreColor;
 
