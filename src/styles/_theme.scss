@@ -1,0 +1,31 @@
+// Angular Material theme (Material 3). A single `mat.theme()` call emits system
+// variables wrapped in CSS `light-dark()`, so the whole palette flips when we
+// change `color-scheme` — that is how the app's light/dark toggle works without
+// shipping two stylesheets. Green is chosen as the single strong accent to fit
+// the industrial / air-quality domain.
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$green-palette,
+        tertiary: mat.$spring-green-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+
+  // Light by default; ThemeStore toggles the `.theme-dark` class on <html>.
+  color-scheme: light;
+}
+
+html.theme-dark {
+  color-scheme: dark;
+}
+
+// Slightly tighten Material's default control sizing for a denser SaaS feel.
+.mat-mdc-form-field {
+  width: 100%;
+}

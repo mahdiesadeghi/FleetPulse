@@ -1,0 +1,131 @@
+// Global base styles: resets, typography defaults, accessible focus states,
+// scrollbar styling and a few cross-cutting utility classes.
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizelegibility;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--fp-text);
+}
+
+a {
+  color: var(--fp-accent);
+  text-decoration: none;
+}
+
+// Visible, consistent keyboard focus across the app (WCAG 2.4.7).
+:focus-visible {
+  outline: 2px solid var(--fp-accent);
+  outline-offset: 2px;
+  border-radius: var(--fp-radius-xs);
+}
+
+// Thin, theme-aware scrollbars.
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--mat-sys-outline) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--mat-sys-outline);
+  border-radius: var(--fp-radius-pill);
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+// Utilities ----------------------------------------------------------------
+
+// Card surface used widely across features.
+.fp-card {
+  background: var(--fp-surface-container);
+  border: 1px solid var(--fp-border);
+  border-radius: var(--fp-radius-lg);
+  box-shadow: var(--fp-shadow-sm);
+}
+
+// Standard padded page content container.
+.fp-page {
+  width: 100%;
+  max-width: var(--fp-content-max);
+  margin: 0 auto;
+  padding: var(--fp-space-5);
+
+  @media (max-width: 600px) {
+    padding: var(--fp-space-4) var(--fp-space-3);
+  }
+}
+
+.fp-muted {
+  color: var(--fp-text-muted);
+}
+
+// Padded panel inside a `.fp-card`.
+.fp-panel {
+  padding: var(--fp-space-5);
+
+  @media (max-width: 600px) {
+    padding: var(--fp-space-4);
+  }
+}
+
+.fp-panel__title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: var(--fp-space-4);
+}
+
+// Vertical rhythm between page sections.
+.fp-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fp-space-5);
+}
+
+// Screen-reader-only content.
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// Respect users who prefer reduced motion.
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

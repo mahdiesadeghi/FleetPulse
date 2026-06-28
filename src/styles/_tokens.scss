@@ -1,0 +1,81 @@
+// Design tokens — the single source of truth for spacing, radius, elevation and
+// semantic colour. Components consume these via `var(--fp-*)` and never hard-code
+// values, which keeps the UI consistent and themable. Colours that must differ
+// between themes use the CSS `light-dark()` function (driven by `color-scheme`).
+
+:root {
+  // Spacing scale (4px base)
+  --fp-space-1: 4px;
+  --fp-space-2: 8px;
+  --fp-space-3: 12px;
+  --fp-space-4: 16px;
+  --fp-space-5: 24px;
+  --fp-space-6: 32px;
+  --fp-space-7: 48px;
+  --fp-space-8: 64px;
+
+  // Radius
+  --fp-radius-xs: 4px;
+  --fp-radius-sm: 8px;
+  --fp-radius-md: 12px;
+  --fp-radius-lg: 16px;
+  --fp-radius-pill: 999px;
+
+  // Elevation
+  --fp-shadow-sm: 0 1px 2px rgb(0 0 0 / 6%), 0 1px 3px rgb(0 0 0 / 8%);
+  --fp-shadow-md: 0 2px 6px rgb(0 0 0 / 6%), 0 6px 16px rgb(0 0 0 / 8%);
+  --fp-shadow-lg: 0 10px 30px rgb(0 0 0 / 12%);
+
+  // Layout dimensions
+  --fp-sidebar-width: 248px;
+  --fp-sidebar-width-collapsed: 76px;
+  --fp-topbar-height: 60px;
+  --fp-content-max: 1480px;
+
+  // Motion
+  --fp-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --fp-duration-fast: 120ms;
+  --fp-duration: 200ms;
+
+  // Semantic surface / text aliases mapped onto Material's system variables so
+  // they adapt to the active theme automatically.
+  --fp-surface: var(--mat-sys-surface);
+  --fp-surface-container: var(--mat-sys-surface-container);
+  --fp-surface-container-high: var(--mat-sys-surface-container-high);
+  --fp-surface-container-highest: var(--mat-sys-surface-container-highest);
+  --fp-border: var(--mat-sys-outline-variant);
+  --fp-text: var(--mat-sys-on-surface);
+  --fp-text-muted: var(--mat-sys-on-surface-variant);
+  --fp-accent: var(--mat-sys-primary);
+  --fp-on-accent: var(--mat-sys-on-primary);
+
+  // Device status
+  --fp-status-online: light-dark(#16a34a, #34d399);
+  --fp-status-offline: light-dark(#64748b, #94a3b8);
+  --fp-status-warning: light-dark(#d97706, #fbbf24);
+  --fp-status-critical: light-dark(#dc2626, #f87171);
+
+  // Alert severity
+  --fp-severity-info: light-dark(#2563eb, #60a5fa);
+  --fp-severity-warning: light-dark(#d97706, #fbbf24);
+  --fp-severity-critical: light-dark(#dc2626, #f87171);
+
+  // Air-quality rating
+  --fp-aq-excellent: light-dark(#16a34a, #34d399);
+  --fp-aq-good: light-dark(#65a30d, #a3e635);
+  --fp-aq-moderate: light-dark(#d97706, #fbbf24);
+  --fp-aq-poor: light-dark(#dc2626, #f87171);
+
+  // Tinted backgrounds for status surfaces (e.g. chips)
+  --fp-tint-online: light-dark(#dcfce7, #064e3b);
+  --fp-tint-offline: light-dark(#f1f5f9, #1e293b);
+  --fp-tint-warning: light-dark(#fef3c7, #451a03);
+  --fp-tint-critical: light-dark(#fee2e2, #450a0a);
+}
+
+html.theme-dark {
+  // Deeper shadows read better on dark surfaces.
+  --fp-shadow-sm: 0 1px 2px rgb(0 0 0 / 30%), 0 1px 3px rgb(0 0 0 / 36%);
+  --fp-shadow-md: 0 2px 6px rgb(0 0 0 / 36%), 0 6px 16px rgb(0 0 0 / 40%);
+  --fp-shadow-lg: 0 10px 30px rgb(0 0 0 / 50%);
+}
