@@ -1,5 +1,7 @@
 # FleetPulse
 
+**🔗 Live demo: https://mahdiesadeghi.github.io/FleetPulse/**
+
 A polished, single-page monitoring dashboard for a fleet of connected industrial
 fans/motors spread across several sites. It visualises live telemetry, indoor
 air quality, and predictive-maintenance health, with drill-down into individual
