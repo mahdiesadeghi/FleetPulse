@@ -1,0 +1,53 @@
+<div class="table" role="table" aria-label="Devices">
+  <div class="row row--head" role="row">
+    @for (col of columns; track col.label) {
+      @if (col.sortKey) {
+        <button
+          type="button"
+          class="cell th"
+          role="columnheader"
+          [class.cell--num]="col.numeric"
+          [class.th--active]="sort() === col.sortKey"
+          (click)="onSort(col)"
+        >
+          <span>{{ col.label }}</span>
+          @if (sort() === col.sortKey) {
+            <span class="material-icons th__arrow" aria-hidden="true">{{
+              sortDir() === 'asc' ? 'arrow_upward' : 'arrow_downward'
+            }}</span>
+          }
+        </button>
+      } @else {
+        <span class="cell th" role="columnheader" [class.cell--num]="col.numeric">{{
+          col.label
+        }}</span>
+      }
+    }
+  </div>
+
+  <cdk-virtual-scroll-viewport [itemSize]="rowHeight" class="viewport">
+    <a
+      *cdkVirtualFor="let d of devices(); trackBy: trackId"
+      class="row row--data"
+      role="row"
+      [routerLink]="['/devices', d.id]"
+    >
+      <span class="cell cell--name" role="cell">{{ d.name }}</span>
+      <span class="cell fp-muted" role="cell">{{ d.model }}</span>
+      <span class="cell fp-muted" role="cell">{{ d.siteName }}</span>
+      <span class="cell" role="cell"><app-status-chip [status]="d.status" /></span>
+      <span class="cell cell--num" role="cell">{{ d.telemetry.temperatureC | number: '1.0-0' }}°</span>
+      <span class="cell cell--num" role="cell">{{ d.telemetry.powerW | number: '1.0-0' }} W</span>
+      <span class="cell cell--num cell--health" role="cell">
+        <span class="bar">
+          <span
+            class="bar__fill"
+            [style.width.%]="d.health.healthScore"
+            [style.background]="color(d.health.healthScore)"
+          ></span>
+        </span>
+        <span class="hscore">{{ d.health.healthScore }}</span>
+      </span>
+    </a>
+  </cdk-virtual-scroll-viewport>
+</div>

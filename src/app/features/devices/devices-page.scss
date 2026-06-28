@@ -1,0 +1,28 @@
+.filters {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--fp-space-3);
+  padding: var(--fp-space-3) var(--fp-space-4);
+}
+
+.results {
+  padding: 0 var(--fp-space-2) var(--fp-space-2);
+  overflow: hidden;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fp-space-3);
+  padding: var(--fp-space-4);
+}
+
+@media (max-width: 760px) {
+  .filters {
+    grid-template-columns: 1fr 1fr;
+  }
+  .filters__search {
+    grid-column: 1 / -1;
+  }
+}

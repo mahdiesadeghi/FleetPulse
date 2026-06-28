@@ -1,0 +1,128 @@
+.table {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.row {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 2fr) minmax(0, 1.3fr) minmax(0, 1.3fr) 112px 84px 96px 150px;
+  align-items: center;
+  gap: var(--fp-space-3);
+  padding: 0 var(--fp-space-4);
+  height: 56px;
+  box-sizing: border-box;
+}
+
+.row--head {
+  border-bottom: 1px solid var(--fp-border);
+  height: 44px;
+  position: sticky;
+  top: 0;
+}
+
+.row--data {
+  border-bottom: 1px solid var(--fp-border);
+  color: var(--fp-text);
+  transition: background var(--fp-duration-fast) var(--fp-ease);
+}
+.row--data:hover {
+  background: var(--fp-surface-container-high);
+}
+
+.cell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
+.cell--name {
+  font-weight: 600;
+}
+.cell--num {
+  justify-self: end;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.th {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--fp-text-muted);
+  cursor: default;
+}
+button.th {
+  cursor: pointer;
+}
+button.th:hover {
+  color: var(--fp-text);
+}
+.th--active {
+  color: var(--fp-accent);
+}
+.th__arrow {
+  font-size: 15px;
+}
+.cell--num.th {
+  justify-content: flex-end;
+}
+
+.cell--health {
+  display: flex;
+  align-items: center;
+  gap: var(--fp-space-2);
+}
+.bar {
+  flex: 1;
+  height: 6px;
+  border-radius: var(--fp-radius-pill);
+  background: var(--fp-surface-container-highest);
+  overflow: hidden;
+}
+.bar__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+}
+.hscore {
+  width: 26px;
+  text-align: right;
+  font-weight: 600;
+}
+
+.viewport {
+  height: calc(100vh - 280px);
+  min-height: 320px;
+}
+
+// Condense columns on smaller screens (hide model, power, then site).
+@media (max-width: 900px) {
+  .row {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr) 112px 84px 150px;
+  }
+  .cell:nth-child(2),
+  .cell:nth-child(6) {
+    display: none;
+  }
+}
+@media (max-width: 620px) {
+  .row {
+    grid-template-columns: minmax(0, 2fr) 112px 84px 150px;
+  }
+  .cell:nth-child(3) {
+    display: none;
+  }
+  .viewport {
+    height: calc(100vh - 320px);
+  }
+}

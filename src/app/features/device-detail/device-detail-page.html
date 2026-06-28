@@ -1,0 +1,72 @@
+<div class="fp-page fp-stack">
+  @if (error()) {
+    <app-empty-state tone="error" icon="error" title="Device unavailable" [message]="error()!">
+      <a class="link-btn" routerLink="/devices">Back to devices</a>
+    </app-empty-state>
+  } @else if (device(); as d) {
+    <header class="detail-head">
+      <a class="back" routerLink="/devices">
+        <span class="material-icons" aria-hidden="true">arrow_back</span> Devices
+      </a>
+      <div class="detail-head__main">
+        <div class="detail-head__titles">
+          <h1 class="detail-head__name">{{ d.name }}</h1>
+          <p class="detail-head__sub fp-muted">{{ d.model }} · {{ d.siteName }}</p>
+        </div>
+        <app-status-chip [status]="d.status" />
+      </div>
+    </header>
+
+    <section class="tiles">
+      @for (tile of liveTiles(); track tile.label) {
+        <app-metric-tile
+          [label]="tile.label"
+          [value]="tile.value"
+          [unit]="tile.unit"
+          [icon]="tile.icon"
+        />
+      }
+    </section>
+
+    <div class="detail-grid">
+      <div class="detail-main fp-stack">
+        <div class="range-row">
+          <span class="range-row__label fp-muted">Time range</span>
+          <app-range-selector [value]="range()" (valueChange)="store.setRange($event)" />
+        </div>
+        <app-telemetry-charts [history]="history()" />
+      </div>
+
+      <aside class="detail-aside fp-stack">
+        <app-health-panel [device]="d" />
+
+        <div class="fp-card fp-panel">
+          <h3 class="fp-panel__title">Anomaly history</h3>
+          @if (alerts().length === 0) {
+            <p class="fp-muted">No alerts recorded for this device.</p>
+          } @else {
+            <div class="alert-list">
+              @for (a of alerts(); track a.id) {
+                <app-alert-item
+                  [alert]="a"
+                  [showDevice]="false"
+                  (acknowledge)="store.acknowledge($event)"
+                />
+              }
+            </div>
+          }
+        </div>
+      </aside>
+    </div>
+  } @else {
+    <div class="skeleton-head">
+      <app-skeleton width="240px" height="32px" />
+      <app-skeleton width="160px" height="18px" />
+    </div>
+    <section class="tiles">
+      @for (i of skeletonTiles; track i) {
+        <app-skeleton height="92px" radius="var(--fp-radius-lg)" />
+      }
+    </section>
+  }
+</div>

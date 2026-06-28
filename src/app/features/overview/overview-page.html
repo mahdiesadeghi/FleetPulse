@@ -1,0 +1,79 @@
+<div class="fp-page fp-stack">
+  <app-page-header
+    title="Fleet Overview"
+    subtitle="Real-time health and energy across every site"
+  />
+
+  @if (error()) {
+    <app-empty-state
+      tone="error"
+      icon="cloud_off"
+      title="Couldn’t load the dashboard"
+      [message]="error()!"
+    >
+      <button matButton="outlined" type="button" (click)="reload()">Retry</button>
+    </app-empty-state>
+  } @else {
+    <section class="kpis">
+      @if (kpis(); as k) {
+        <app-kpi-card label="Total devices" [value]="k.totalDevices" icon="memory" />
+        <app-kpi-card
+          label="Online"
+          [value]="k.onlinePct"
+          unit="%"
+          icon="wifi"
+          [hint]="k.onlineCount + ' of ' + k.totalDevices + ' reporting'"
+          accent="var(--fp-status-online)"
+        />
+        <app-kpi-card
+          label="Active alerts"
+          [value]="k.activeAlerts"
+          icon="notifications_active"
+          [hint]="k.criticalAlerts + ' critical'"
+          accent="var(--fp-status-warning)"
+        />
+        <app-kpi-card label="Fleet energy" [value]="k.fleetEnergyKw" unit="kW" icon="bolt" />
+        <app-kpi-card
+          label="Avg air quality"
+          [value]="k.avgAqScore"
+          unit="/100"
+          icon="air"
+          accent="var(--fp-status-online)"
+        />
+      } @else {
+        @for (i of skeletonCards; track i) {
+          <app-skeleton height="116px" radius="var(--fp-radius-lg)" />
+        }
+      }
+    </section>
+
+    <section class="grid-2">
+      <div class="fp-card fp-panel">
+        <h3 class="fp-panel__title">Fleet status</h3>
+        @if (data(); as d) {
+          <app-fleet-status-chart [breakdown]="d.statusBreakdown" />
+        } @else {
+          <app-skeleton height="260px" radius="var(--fp-radius-md)" />
+        }
+      </div>
+
+      <div class="fp-card fp-panel">
+        <h3 class="fp-panel__title">Energy consumption · last 24h</h3>
+        @if (data(); as d) {
+          <app-energy-chart [series]="d.energySeries" />
+        } @else {
+          <app-skeleton height="260px" radius="var(--fp-radius-md)" />
+        }
+      </div>
+    </section>
+
+    <section class="fp-card fp-panel">
+      <h3 class="fp-panel__title">Top issues</h3>
+      @if (data(); as d) {
+        <app-top-issues [devices]="d.topIssues" />
+      } @else {
+        <app-skeleton height="200px" />
+      }
+    </section>
+  }
+</div>
