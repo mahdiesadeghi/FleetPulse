@@ -1,0 +1,80 @@
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<div class="shell" [class.shell--nav-open]="navOpen()">
+  <button
+    type="button"
+    class="shell__backdrop"
+    aria-label="Close navigation"
+    (click)="closeNav()"
+  ></button>
+
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <span class="brand__mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="28" height="28">
+          <rect x="1" y="1" width="30" height="30" rx="9" fill="var(--fp-accent)" />
+          <path
+            d="M6 19 L11 19 L13.5 11 L18 24 L20.5 16 L23 19 L26 19"
+            fill="none"
+            stroke="var(--fp-on-accent)"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </span>
+      <span class="brand__name">FleetPulse</span>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Primary">
+      @for (item of navItems; track item.path) {
+        <a
+          class="navlink"
+          [routerLink]="item.path"
+          routerLinkActive="navlink--active"
+          (click)="closeNav()"
+        >
+          <span class="navlink__icon material-icons" aria-hidden="true">{{ item.icon }}</span>
+          <span class="navlink__label">{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+
+    <div class="sidebar__footer">
+      <span class="live-dot" aria-hidden="true"></span>
+      <span>Live demo · mock data</span>
+    </div>
+  </aside>
+
+  <div class="shell__main">
+    <header class="topbar">
+      <button
+        type="button"
+        class="iconbtn topbar__menu"
+        aria-label="Toggle navigation"
+        (click)="toggleNav()"
+      >
+        <span class="material-icons" aria-hidden="true">menu</span>
+      </button>
+
+      <h2 class="topbar__title">{{ pageTitle() }}</h2>
+
+      <span class="topbar__spacer"></span>
+
+      <button
+        type="button"
+        class="iconbtn"
+        [attr.aria-label]="theme.isDark() ? 'Switch to light theme' : 'Switch to dark theme'"
+        (click)="theme.toggle()"
+      >
+        <span class="material-icons" aria-hidden="true">{{
+          theme.isDark() ? 'light_mode' : 'dark_mode'
+        }}</span>
+      </button>
+    </header>
+
+    <main class="content" id="main-content" tabindex="-1">
+      <router-outlet />
+    </main>
+  </div>
+</div>
